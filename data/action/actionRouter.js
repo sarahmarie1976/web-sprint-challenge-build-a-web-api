@@ -37,7 +37,7 @@ router.get("/", (req, res) => {
 
 // Update
 
-router.put('/:id', (req, res) => {
+router.put('/:id',  (req, res, next) => {
     const actionInfo = req.body
 
     const { id } = req.params
@@ -50,16 +50,16 @@ router.put('/:id', (req, res) => {
             res.status(404).json({ message: "Your action could not be found" })
         }
     })
-    .catch( error => {
-        res.status(500).json({ error: "There was an error updating your action" })
-    })
+    .catch(error => {
+        next(error);
+      })
 })
 
 
 
 // Delete
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id',   (req, res, next) => {
     actionModel
     .remove(req.params.id)
     .then( e => {
@@ -69,10 +69,15 @@ router.delete('/:id', (req, res) => {
             req.status(404).json({ message: "Action could not be found" })
         }
     })
-    .catch( error => {
-        res.status(500).json({ error: "Error deleting action" })
-    })
+    .catch(error => {
+        next(error);
+      })
 })
+
+
+// Valadation
+
+
 
 
 
